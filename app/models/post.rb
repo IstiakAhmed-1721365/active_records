@@ -3,19 +3,24 @@ class Post < ApplicationRecord
     belongs_to :user
     has_many :comments
 
-    scope :has_comments, -> { where (posts.comments.count > 0) }
+    scope :has_comments, -> { where ("posts.comments.count > ?", 0) }
 
-    scope :good_posts, -> { where (posts.like_count > 10) }
+    scope :good_posts, -> { where ("posts.like_count >=?", 10) }
 
     def user_has_commented  
     end
 
-    scope :search_user_name, -> { where("users.name LIKE ?","%" + params[:q] +"%") }   
+    scope :search_user_name, -> { where("users.name LIKE ?","%" + params[:q] +"%") }  
+    
+    #scope :search_user_name, -> (n) { where(name: n) }
 
     scope :search_post_title, -> { where("posts.title LIKE ?","%" + params[:q] +"%") }   
 
 
     def total_like_count
+        count = 0
+        self.post.each
+        
     end
 
     def like_count
